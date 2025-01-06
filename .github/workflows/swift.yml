@@ -34,9 +34,9 @@ jobs:
       uses: Harmon758/postgresql-action@v1.0.0
       with:
         postgresql version: 17.2
-        postgresql db: ${{ secrets.DATABASE_NAME }}
-        postgresql user: ${{ secrets.DATABASE_USERNAME }}
-        postgresql password: ${{ secrets.DATABASE_PASSWORD }}
+        postgresql db: ${{ env.DATABASE_NAME }}
+        postgresql user: ${{ env.DATABASE_USERNAME }}
+        postgresql password: ${{ env.DATABASE_PASSWORD }}
 
     - name: Build
       run: |
