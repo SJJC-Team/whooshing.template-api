@@ -1,6 +1,4 @@
 # This workflow will build a Swift project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
-
 name: Swift
 
 on:
@@ -16,7 +14,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: 17.2
+        postgresql db: vapor
+        postgresql user: vapor
+        postgresql password: vapor_test
+
+    - name: Set Environment
+      run: |
+        export DATABASE_HOST=localhost
+        export DATABASE_PORT=5432
+        export DATABASE_USERNAME=vapor
+        export DATABASE_PASSWORD=vapor_test
+        export DATABASE_NAME=vapor
+
     - name: Build
-      run: cd whooshing.template-bare; swift build -v
+      run: |
+        cd whooshing.template-bare
+        swift build -v
+
     - name: Run tests
-      run: cd whooshing.template-bare; swift test -v
+      run: |
+        cd whooshing.template-bare
+        swift test -v
