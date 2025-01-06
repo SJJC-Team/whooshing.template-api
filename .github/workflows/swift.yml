@@ -26,23 +26,21 @@ jobs:
       with:
         path: whooshing.template-bare/.build
         
-    - name: Cache Swift dependencies
+    - name: Cache
       uses: actions/cache@v4.2.0
       with:
-        path: |
-          ~/.swiftpm
-          whooshing.template-bare/.build
-        key: ${{ runner.os }}-swift-${{ hashFiles('whooshing.template-bare/Package.swift') }}
+        path: whooshing.template-bare/.build
+        key: ${{ runner.os }}-build-${{ hashFiles('whooshing.template-bare/Package.swift') }}
         restore-keys: |
-          ${{ runner.os }}-swift-
+          ${{ runner.os }}-build-
     
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
       with:
-        postgresql version: 17.2
-        postgresql db: vapor
-        postgresql user: vapor
-        postgresql password: vapor_test
+        postgresql_version: 17.2
+        postgresql_db: ${{ env.DATABASE_NAME }}
+        postgresql_user: ${{ env.DATABASE_USERNAME }}
+        postgresql_password: ${{ env.DATABASE_PASSWORD }}
 
     - name: Build
       run: |
