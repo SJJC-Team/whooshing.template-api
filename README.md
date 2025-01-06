@@ -1,5 +1,10 @@
 # Whooshing 服务模块模版 - 基本
-其中包括最基本的数据库以及 whooshing 系统集成的 api。
+其中包括最基本的数据库以及 whooshing 系统集成的 api，这包括。
+
+1. 加密通讯机制(见[模块管理器项目](https://github.com/SJJC-Team/whooshing-module-manager))
+2. 数据库 Percona PostgreSQL 连接
+3. 取得密钥
+4. 由 Whooshing 系统环境控制(见[该项目](https://github.com/SJJC-Team/whooshing-env-init))
 
 见[主项目](https://github.com/SJJC-Team/whooshing)
 
