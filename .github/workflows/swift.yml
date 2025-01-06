@@ -11,6 +11,12 @@ jobs:
   build:
 
     runs-on: ubuntu-22.04
+    env:
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: vapor
+      DATABASE_PASSWORD: vapor_test
+      DATABASE_NAME: vapor
 
     steps:
     - uses: actions/checkout@v4
@@ -22,14 +28,6 @@ jobs:
         postgresql db: vapor
         postgresql user: vapor
         postgresql password: vapor_test
-
-    - name: Set Environment
-      run: |
-        export DATABASE_HOST=localhost
-        export DATABASE_PORT=5432
-        export DATABASE_USERNAME=vapor
-        export DATABASE_PASSWORD=vapor_test
-        export DATABASE_NAME=vapor
 
     - name: Build
       run: |
