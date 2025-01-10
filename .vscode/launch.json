@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:whooshing.template-bare}",
+            "name": "Debug App",
+            "program": "${workspaceFolder:whooshing.template-bare}/.build/debug/App",
+            "preLaunchTask": "swift: Build Debug App"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:whooshing.template-bare}",
+            "name": "Release App",
+            "program": "${workspaceFolder:whooshing.template-bare}/.build/release/App",
+            "preLaunchTask": "swift: Build Release App"
+        }
+    ]
+}
