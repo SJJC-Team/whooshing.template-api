@@ -4,18 +4,18 @@
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:whooshing.template-bare}",
+            "cwd": "${workspaceFolder:whooshing.template-api}",
             "name": "Debug App",
-            "program": "${workspaceFolder:whooshing.template-bare}/.build/debug/App",
+            "program": "${workspaceFolder:whooshing.template-api}/.build/debug/App",
             "preLaunchTask": "swift: Build Debug App"
         },
         {
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:whooshing.template-bare}",
+            "cwd": "${workspaceFolder:whooshing.template-api}",
             "name": "Release App",
-            "program": "${workspaceFolder:whooshing.template-bare}/.build/release/App",
+            "program": "${workspaceFolder:whooshing.template-api}/.build/release/App",
             "preLaunchTask": "swift: Build Release App"
         }
     ]
