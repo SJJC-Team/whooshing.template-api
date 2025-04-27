@@ -29,6 +29,8 @@ let package = Package(
                 .product(name: "Fluent", package: "whooshing-fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
             ],
+            // 设置该 Whooshing 服务模块的子模块
+            // 指定某个环境变量，则需要在 configure.swift 中实现相关的配置函数
             swiftSettings: swiftSettings + ["HTTPS", "API"].map { .define($0) }
         ),
         .testTarget(
