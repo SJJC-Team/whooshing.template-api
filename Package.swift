@@ -7,11 +7,16 @@ let package = Package(
        .macOS(.v13)
     ],
     dependencies: [
+        // 💧 Vapor -- Swift 服务器端第三方框架
         .package(url: "https://github.com/SJJC-Team/whooshing-vapor.git", branch: "main"),
+        // ⭐️ Whooshing 系统基本框架
         .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", branch: "develop"),
+        // 🔵 Swift 高性能网络通讯模块
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
-//        .package(url: "https://github.com/SJJC-Team/whooshing-fluent.git", branch: "main"),
-//        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
+        // 🗄 关系型和非关系型数据库的 ORM(对象关系映射)
+        .package(url: "https://github.com/SJJC-Team/whooshing-fluent.git", branch: "main"),
+        // 🐘 对 PostgreSQL 的 Fluent 驱动器
+        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
     ],
     targets: [
         .executableTarget(
@@ -21,8 +26,8 @@ let package = Package(
                 .product(name: "Whooshing", package: "whooshing.toolbox-basic"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
-//                .product(name: "Fluent", package: "whooshing-fluent"),
-//                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
+                .product(name: "Fluent", package: "whooshing-fluent"),
+                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
             ],
             swiftSettings: swiftSettings + ["HTTPS", "API"].map { .define($0) }
         ),
