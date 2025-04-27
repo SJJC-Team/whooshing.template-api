@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "whooshing.template-api",
+    name: "whooshing.template-basic",
     platforms: [
        .macOS(.v13)
     ],
