@@ -2,39 +2,35 @@
 import PackageDescription
 
 let package = Package(
-    name: "whooshing.template-bare",
+    name: "whooshing.template-api",
     platforms: [
        .macOS(.v13)
     ],
     dependencies: [
-        // 💧 A server-side Swift web framework.
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.110.1"),
-        // 🗄 An ORM for SQL and NoSQL databases.
-        .package(url: "https://github.com/vapor/fluent.git", from: "4.9.0"),
-        // 🐘 Fluent driver for Postgres.
-        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
-        // 🔵 Non-blocking, event-driven networking for Swift. Used for custom executors
+        .package(url: "https://github.com/SJJC-Team/whooshing-vapor.git", branch: "main"),
+        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", branch: "develop"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
-        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", branch: "develop")
+//        .package(url: "https://github.com/SJJC-Team/whooshing-fluent.git", branch: "main"),
+//        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
     ],
     targets: [
         .executableTarget(
             name: "App",
             dependencies: [
-                .product(name: "Fluent", package: "fluent"),
-                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
-                .product(name: "Vapor", package: "vapor"),
+                .product(name: "Vapor", package: "whooshing-vapor"),
+                .product(name: "Whooshing", package: "whooshing.toolbox-basic"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "ToolboxBsc", package: "whooshing.toolbox-basic"),
+//                .product(name: "Fluent", package: "whooshing-fluent"),
+//                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
             ],
-            swiftSettings: swiftSettings
+            swiftSettings: swiftSettings + ["HTTPS", "API"].map { .define($0) }
         ),
         .testTarget(
             name: "AppTests",
             dependencies: [
                 .target(name: "App"),
-                .product(name: "VaporTesting", package: "vapor"),
+                .product(name: "VaporTesting", package: "whooshing-vapor"),
             ],
             swiftSettings: swiftSettings
         )

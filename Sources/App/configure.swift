@@ -1,23 +1,19 @@
-import NIOSSL
-import Fluent
-import FluentPostgresDriver
 import Vapor
+import Whooshing
 
-// configures your application
-public func configure(_ app: Application) async throws {
-    // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
-
-    app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
-        hostname: Environment.get("DATABASE_HOST") ?? "localhost",
-        port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
-        username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
-        password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
-        database: Environment.get("DATABASE_NAME") ?? "vapor_database",
-        tls: .prefer(try .init(configuration: .clientDefault)))
-    ), as: .psql)
-
-    app.migrations.add(CreateTodo())
-    // register routes
-    try routes(app)
+struct Configuration {
+    /// 对 Https 模块进行配置，如果设置了 HTTPS 环境变量
+    static func https(_ app: Application) async throws {
+        try routes(app)
+    }
+    
+    /// 对 API 模块进行配置，如果设置了 API 环境变量
+    static func api(_ app: Application) async throws {
+        try routes(app)
+    }
+    
+    /// 对 Inline 模块进行配置
+    static func inline(_ app: Application) async throws {
+        try routes(app)
+    }
 }
