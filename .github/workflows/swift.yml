@@ -9,12 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    env:
-      DATABASE_HOST: localhost
-      DATABASE_PORT: 5432
-      DATABASE_USERNAME: vapor
-      DATABASE_PASSWORD: vapor_test
-      DATABASE_NAME: vapor
 
     steps:
     - uses: actions/checkout@v4
@@ -29,14 +23,6 @@ jobs:
         key: ${{ runner.os }}-swift-${{ hashFiles('Package.swift') }}
         restore-keys: |
           ${{ runner.os }}-swift-
-    
-    - name: Setup PostgreSQL
-      uses: Harmon758/postgresql-action@v1.0.0
-      with:
-        postgresql version: 17.2
-        postgresql db: ${{ env.DATABASE_NAME }}
-        postgresql user: ${{ env.DATABASE_USERNAME }}
-        postgresql password: ${{ env.DATABASE_PASSWORD }}
 
     - name: Build
       run: swift build -v
