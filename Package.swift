@@ -8,13 +8,13 @@ let package = Package(
     ],
     dependencies: [
         // 💧 Vapor -- Swift 服务器端第三方框架
-        .package(url: "https://github.com/SJJC-Team/whooshing-vapor.git", branch: "main"),
+        .package(url: "https://github.com/SJJC-Team/whooshing-vapor.git", from: "1.0.0"),
         // ⭐️ Whooshing 系统基本框架
-        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", branch: "develop"),
+        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", from: "1.2.0"),
         // 🔵 Swift 高性能网络通讯模块
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         // 🗄 关系型和非关系型数据库的 ORM(对象关系映射)
-        .package(url: "https://github.com/SJJC-Team/whooshing-fluent.git", branch: "main"),
+        .package(url: "https://github.com/SJJC-Team/whooshing-fluent.git", from: "1.0.0"),
         // 🐘 对 PostgreSQL 的 Fluent 驱动器
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
     ],
