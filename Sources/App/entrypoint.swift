@@ -39,17 +39,20 @@ enum Entrypoint {
         var mode = Whooshing<Inline>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.inlineDebuggingData() : nil)
         try LoggingSystem.bootstrap(from: &mode.envrionment)
         let inline = try await Whooshing.make(mode)
+        try await Configuration.inline(inline, app: inline.app)
         
         #if API
         var apiMode = Whooshing<Api>.Mode.detect(UnsafeDebuggingOnly.apiDebuggingData())
         apiMode.envrionment = mode.envrionment
         let api = try await Whooshing.make(apiMode, with: inline)
+        try await Configuration.api(api, app: api.app)
         #endif
         
         #if HTTPS
         var httpsMode = Whooshing<Https>.Mode.detect(UnsafeDebuggingOnly.httpsDebuggingData())
         httpsMode.envrionment = mode.envrionment
         let https = try await Whooshing.make(httpsMode)
+        try await Configuration.https(https, app: https.app)
         #endif
         
         // 并行启动服务

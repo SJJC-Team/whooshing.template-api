@@ -1,5 +1,5 @@
 {
-  "originHash" : "aa22527ae43c175e7d16270c6d142aeaf7487e0982a0f6e99789dd2f0579594a",
+  "originHash" : "67a8cd3490cb5e4302c457268cd5920f17b2fb88c759542ccf87d7d11ffae805",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -321,8 +321,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SJJC-Team/whooshing.toolbox-client-vapor",
       "state" : {
-        "revision" : "9d9c79e73c014deafe3ce58f8e9cfba481db6e0f",
-        "version" : "1.1.7"
+        "revision" : "1e227b94e2703ffac6c20233804942e8a925119d",
+        "version" : "1.1.9"
       }
     },
     {
