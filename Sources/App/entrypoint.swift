@@ -35,18 +35,30 @@ enum Entrypoint {
     static let testingAllowed = true
     
     static func main() async throws {
-        
         var mode = Whooshing<Inline>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.inlineDebuggingData() : nil)
         try LoggingSystem.bootstrap(from: &mode.envrionment)
+        Woo.isIndependentDebug = mode.envrionment != .production && testingAllowed
         let inline = try await Whooshing.make(mode)
-        try await Configuration.inline(inline, app: inline.app)
+        do {
+            try await Configuration.inline(inline, app: inline.app)
+        } catch {
+            inline.logger.report(error: error)
+            try? await inline.asyncShutdown()
+            throw error
+        }
         Woo.inline = inline
         
         #if API
         var apiMode = Whooshing<Api>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.apiDebuggingData() : nil)
         apiMode.envrionment = mode.envrionment
         let api = try await Whooshing.make(apiMode, with: inline)
-        try await Configuration.api(api, app: api.app)
+        do {
+            try await Configuration.api(api, app: api.app)
+        } catch {
+            api.logger.report(error: error)
+            try? await api.asyncShutdown()
+            throw error
+        }
         Woo.api = api
         #endif
         
@@ -54,7 +66,13 @@ enum Entrypoint {
         var httpsMode = Whooshing<Https>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.httpsDebuggingData() : nil)
         httpsMode.envrionment = mode.envrionment
         let https = try await Whooshing.make(httpsMode)
-        try await Configuration.https(https, app: https.app)
+        do {
+            try await Configuration.https(https, app: https.app)
+        } catch {
+            https.logger.report(error: error)
+            try? await https.asyncShutdown()
+            throw error
+        }
         Woo.https = https
         #endif
         
@@ -76,16 +94,19 @@ enum Entrypoint {
     }
 }
 
+/// 记录不同的服务实例，请勿尝试修改其中的内容，除非你知道你在做什么
 @MainActor
 struct Woo {
-    fileprivate(set) static var inline: Whooshing<Inline>!
+    fileprivate(set) nonisolated(unsafe) static var isIndependentDebug = false
+    
+    fileprivate(set) nonisolated(unsafe) static var inline: Whooshing<Inline>!
     
     #if API
-    fileprivate(set) static var api: Whooshing<Api>!
+    fileprivate(set) nonisolated(unsafe) static var api: Whooshing<Api>!
     #endif
     
     #if HTTPS
-    fileprivate(set) static var https: Whooshing<Https>!
+    fileprivate(set) nonisolated(unsafe) static var https: Whooshing<Https>!
     #endif
 }
 
