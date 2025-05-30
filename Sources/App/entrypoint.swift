@@ -40,19 +40,22 @@ enum Entrypoint {
         try LoggingSystem.bootstrap(from: &mode.envrionment)
         let inline = try await Whooshing.make(mode)
         try await Configuration.inline(inline, app: inline.app)
+        Woo.inline = inline
         
         #if API
-        var apiMode = Whooshing<Api>.Mode.detect(UnsafeDebuggingOnly.apiDebuggingData())
+        var apiMode = Whooshing<Api>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.apiDebuggingData() : nil)
         apiMode.envrionment = mode.envrionment
         let api = try await Whooshing.make(apiMode, with: inline)
         try await Configuration.api(api, app: api.app)
+        Woo.api = api
         #endif
         
         #if HTTPS
-        var httpsMode = Whooshing<Https>.Mode.detect(UnsafeDebuggingOnly.httpsDebuggingData())
+        var httpsMode = Whooshing<Https>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.httpsDebuggingData() : nil)
         httpsMode.envrionment = mode.envrionment
         let https = try await Whooshing.make(httpsMode)
         try await Configuration.https(https, app: https.app)
+        Woo.https = https
         #endif
         
         // 并行启动服务
@@ -143,7 +146,7 @@ struct UnsafeDebuggingOnly {
                 name: "Testing-Https-\(httpsListenPort)",
                 port: httpsListenPort,
                 databases: databaseConfigs
-            ),
+            )
         )
     }
 }
