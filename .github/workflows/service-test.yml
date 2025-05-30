@@ -1,4 +1,4 @@
-name: Swift
+name: Service Testing Workflow
 
 on:
   push:
@@ -20,12 +20,20 @@ jobs:
         path: |
           ~/.swiftpm
           .build
-        key: ${{ runner.os }}-swift-${{ hashFiles('Package.swift') }}
+        key: ${{ runner.os }}-service-swift-${{ hashFiles('Package.swift') }}
         restore-keys: |
-          ${{ runner.os }}-swift-
+          ${{ runner.os }}-service-swift-
+    
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: 17.2
+        postgresql db: postgres
+        postgresql user: postgres
+        postgresql password: postgres
 
-    - name: Build
+    - name: Build-Service
       run: swift build -v
 
-    - name: Run tests
+    - name: Run tests-Service
       run: swift test -v
