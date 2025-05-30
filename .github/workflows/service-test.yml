@@ -30,7 +30,7 @@ jobs:
         postgresql version: 17.2
         postgresql db: postgres
         postgresql user: postgres
-        postgresql password: postgres
+        postgresql password: password
 
     - name: Build-Service
       run: swift build -v
