@@ -68,4 +68,4 @@ cp configure.yaml release/module/configure.yaml
 cp .build/release/App release/module/bundle/App
 cp -r .build/release/*.resources release/module/bundle/
 cp pm2.config.json release/module/bundle/pm2.config.json
-tar -czvf release/$OUTPUT release/module/
+tar -czvf release/$OUTPUT -C release module/
