@@ -12,10 +12,17 @@ jobs:
   unit-tests:
     uses: SJJC-Team/ci/.github/workflows/run-unit-tests.yml@develop
     with:
+      ios_scheme_name: whooshing.template-basic
+      work_dir: "."
+
       with_release_mode_testing: true
       with_musl: false
       with_api_check: false
-      only_build: true
       ios_xcodebuild_action: ''
-      ios_scheme_name: whooshing.template-basic
+
+      only_build: true
+      with_pg_test: true
+      with_pg_database: "postgres"
+      with_pg_user: "postgres"
+      with_pg_password: "password"
     secrets: inherit
