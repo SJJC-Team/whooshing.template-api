@@ -44,6 +44,12 @@
    name: "whooshing.my-service"
    ```
 
+   同时修改 [pm2.config.json](pm2.config.json)  的 name 字段，确保名称与 Package  的名称相同
+
+   ```json
+   "name": "whooshing.template-basic"
+   ```
+
 3. **设置模块类型**
 
    在  [Package.swift](Package.swift) 文件顶部设置你要启用的子模块类型：
@@ -59,7 +65,13 @@
    >
    > 关于子模块，请见  [whooshing.toolbox-server](https://github.com/SJJC-Team/whooshing.toolbox-server)
 
-4. **运行项目**
+4. **模块配置**
+
+   在 [configure.yaml](configure.yaml) 中根据你的需求进行配置
+
+   > 关于具体的配置细节，请详细参照其中的注释文档
+
+5. **运行项目**
 
    使用 Xcode 或命令行运行：
 

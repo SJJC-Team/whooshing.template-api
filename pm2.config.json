@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "whooshing.template-basic",
+            "cwd": "./",
+            "script": "./App --env production"
+        }
+    ]
+}

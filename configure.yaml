@@ -1,24 +1,37 @@
----
+--- # 该模块的名称，在服务模块创建时将使用该名称
 whooshing.template-basic:
+    # 该模块的根域名 (二级域名)
+    # 若设置为 template，则访问域名将为 "template.whooshings.space"
     domain: "template"
-    pgsql:
-        "default":
-            database: "testing"
-            port: 0
-        "pg2":
-            database: "testing2"
-            port: 10
+    # 填写 PostgreSQL 数据库的配置
+    # 你可以创建多个数据库连接
+    pgsql: {}
+    # 服务模块的捆绑包
+    # 可以为不同的子模块分别指定配置
+    # 你可以指定多个
+    # 可配置的子模块有 API 和 HTTPS
     service_bundles:
+        # 服务模块的名称，你可以随意指定
         service1:
+            # api 模块配置块
             api:
+                # 该模块的运行端口(相对端口)
                 port: 1
-                pgDatabasePorts: [0, 10]
+                # 该模块将连接的数据库(相对端口)
+                pgDatabasePorts: []
+                # 该模块的三级域名，本例的配置中，你可以通过
+                # "api.template.whooshings.space" 访问该模块
                 domain: "api"
+            # https 模块配置块
             https:
                 port: 3
-                pgDatabasePorts: [0]
+                pgDatabasePorts: []
                 domain: "web"
-            path: "<<Path to bundle>>"
+            # 该服务模块的捆绑包位置，不要改动该配置，除非你知道你在做什么
+            path: "./bundle"
+    # INLINE 子模块的配置块
     shared_inline_module:
+        # 该模块将连接的数据库(相对端口)
         port: 2
-        pgDatabasePorts: [0, 10]
+        # 该模块将连接的数据库(相对端口)
+        pgDatabasePorts: []
