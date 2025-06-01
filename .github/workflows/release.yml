@@ -9,5 +9,6 @@ jobs:
     uses: SJJC-Team/ci/.github/workflows/release.yml@develop
     with:
       work_dir: "."
+      app_name: "App"
     secrets:
       RELEASE_ACCESS: ${{ secrets.CLWANG_RELEASE_ACCESS }}
