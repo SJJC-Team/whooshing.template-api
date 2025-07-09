@@ -38,12 +38,12 @@ enum Entrypoint {
         var mode = Whooshing<Inline>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.inlineDebuggingData() : nil)
         try LoggingSystem.bootstrap(from: &mode.envrionment)
         Woo.isIndependentDebug = mode.envrionment != .production && testingAllowed
-        let inline = try await Whooshing.make(mode)
+        let inline = try await Whooshing.make(mode).get()
         do {
             try await Configuration.inline(inline, app: inline.app)
         } catch {
             inline.logger.report(error: error)
-            try? await inline.asyncShutdown()
+            try? await inline.asyncShutdown().get()
             throw error
         }
         Woo.inline = inline
@@ -51,12 +51,12 @@ enum Entrypoint {
         #if API
         var apiMode = Whooshing<Api>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.apiDebuggingData() : nil)
         apiMode.envrionment = mode.envrionment
-        let api = try await Whooshing.make(apiMode, with: inline)
+        let api = try await Whooshing.make(apiMode, with: inline).get()
         do {
             try await Configuration.api(api, app: api.app)
         } catch {
             api.logger.report(error: error)
-            try? await api.asyncShutdown()
+            try? await api.asyncShutdown().get()
             throw error
         }
         Woo.api = api
@@ -65,12 +65,12 @@ enum Entrypoint {
         #if HTTPS
         var httpsMode = Whooshing<Https>.Mode.detect(testingAllowed ? UnsafeDebuggingOnly.httpsDebuggingData() : nil)
         httpsMode.envrionment = mode.envrionment
-        let https = try await Whooshing.make(httpsMode)
+        let https = try await Whooshing.make(httpsMode).get()
         do {
             try await Configuration.https(https, app: https.app)
         } catch {
             https.logger.report(error: error)
-            try? await https.asyncShutdown()
+            try? await https.asyncShutdown().get()
             throw error
         }
         Woo.https = https

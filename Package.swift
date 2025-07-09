@@ -24,11 +24,11 @@ let package = Package(
     ],
     dependencies: [
         // 💧 Vapor -- Swift 服务器端第三方框架
-        .package(url: "https://github.com/SJJC-Team/whooshing-vapor.git", from: "1.0.6"),
+        .package(url: "https://github.com/SJJC-Team/whooshing-vapor.git", from: "1.0.7"),
         // 🪩 Whooshing 基本工具
-        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", from: "1.3.7"),
+        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", from: "1.4.4"),
         // ⭐️ Whooshing 服务模块系统
-        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-server.git", .upToNextMajor(from: "1.1.0")),
+        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-server.git", .upToNextMajor(from: "1.1.5")),
         // 🔵 Swift 高性能网络通讯模块
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
     ],
