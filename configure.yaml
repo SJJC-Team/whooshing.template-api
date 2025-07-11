@@ -4,7 +4,7 @@ whooshing.template-basic:
     # 若设置为 template，则访问域名将为 "template.whooshings.space"
     domain: "template"
     # 填写 PostgreSQL 数据库的配置
-    # 你可以创建多个数据库连接
+    # 你可以创建多个数据库连接，此处默认不创建
     pgsql: {}
     # 服务模块的捆绑包
     # 可以为不同的子模块分别指定配置
@@ -17,15 +17,19 @@ whooshing.template-basic:
             api:
                 # 该模块的运行端口(相对端口)
                 port: 1
+                # 该模块所绑定的主机名或 ipv4 地址，可选，默认为 localhost
+                hostname: "localhost"
                 # 该模块将连接的数据库(相对端口)
-                pgDatabasePorts: []
+                pg_database_ports: []
                 # 该模块的三级域名，本例的配置中，你可以通过
                 # "api.template.whooshings.space" 访问该模块
                 domain: "api"
             # https 模块配置块
             https:
                 port: 3
-                pgDatabasePorts: []
+                # 可选，默认为 localhost
+                hostname: "localhost"
+                pg_database_ports: []
                 domain: "web"
             # 该服务模块的捆绑包位置，不要改动该配置，除非你知道你在做什么
             path: "./bundle"
@@ -34,4 +38,4 @@ whooshing.template-basic:
         # 该模块将连接的数据库(相对端口)
         port: 2
         # 该模块将连接的数据库(相对端口)
-        pgDatabasePorts: []
+        pg_database_ports: []
