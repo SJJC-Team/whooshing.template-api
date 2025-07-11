@@ -116,10 +116,6 @@ extension DebuggingParameters {
 
 extension Woo {
     
-    enum Err: String, ErrList {
-        case illegalService = "不合法的服务模块"
-    }
-    
     static let mode: Whooshing<Inline>.Mode = {
         var mode = Whooshing<Inline>.Mode.detect(testingAllowed ? DebuggingParameters.inlineDebuggingData() : nil)
         fatalIfFail {
