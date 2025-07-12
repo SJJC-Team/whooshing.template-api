@@ -17,7 +17,7 @@ enum WhooshingModuleType: String {
 let package = Package(
     name: "whooshing.template-basic",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v11),
         .iOS(.v14),
         .watchOS(.v6),
         .tvOS(.v13),
@@ -28,7 +28,7 @@ let package = Package(
         // 🪩 Whooshing 基本工具
         .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-basic.git", from: "1.4.4"),
         // ⭐️ Whooshing 服务模块系统
-        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-server.git", .upToNextMajor(from: "1.1.5")),
+        .package(url: "https://github.com/SJJC-Team/whooshing.toolbox-server.git", .upToNextMajor(from: "1.1.7")),
         // 🔵 Swift 高性能网络通讯模块
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
     ],

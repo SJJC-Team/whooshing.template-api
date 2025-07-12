@@ -7,7 +7,7 @@ import WhooshingServer
 @Suite("App Tests")
 struct AppTests {
     private func withApp(_ test: (Whooshing<Https>, Application) async throws -> ()) async throws {
-        let woo = try await Whooshing.make(.testing(UnsafeDebuggingOnly.httpsDebuggingData())).get()
+        let woo = try await Whooshing.make(.testing(DebuggingParameters.httpsDebuggingData())).get()
         do {
             try await Configuration.https(woo, app: woo.app)
             try await test(woo, woo.app)
