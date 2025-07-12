@@ -180,17 +180,17 @@ extension Woo {
     static func main() async throws {
         // 并行启动服务
         #if !API && !HTTPS
-        try await inline.executeWithAsyncShutdown()
+        try await inline.executeWithAsyncShutdown().get()
         #else
-        async let _ = inline.executeWithAsyncShutdown()
+        async let _ = inline.executeWithAsyncShutdown().get()
         #endif
         
         #if API
-        async let _ = api.executeWithAsyncShutdown()
+        async let _ = api.executeWithAsyncShutdown().get()
         #endif
         
         #if HTTPS
-        async let _ = https.executeWithAsyncShutdown()
+        async let _ = https.executeWithAsyncShutdown().get()
         #endif
     }
 }
