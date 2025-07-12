@@ -33,7 +33,7 @@ enum Woo {
     static let isIndependentDebug: Bool = mode.envrionment != .production && testingAllowed
     
     /// 指定所有日志的记录等级
-    static let logLevel: Logger.Level = .notice
+    static let logLevel: Logger.Level = .info
 }
 
 /// 用于调试模式的参数，仅在独立调试和测试模式下生效，不会在生产或非独立开发模式下生效
@@ -127,7 +127,7 @@ extension Woo {
     static let inline: Whooshing<Inline> = {
         asyncToSync {
             let inline = try await Whooshing.make(mode).get()
-            inline.app.logger.logLevel = logLevel
+            inline.logger.logLevel = logLevel
             do {
                 try await Configuration.inline(inline, app: inline.app)
             } catch {
@@ -145,7 +145,7 @@ extension Woo {
             var apiMode = Whooshing<Api>.Mode.detect(testingAllowed ? DebuggingParameters.apiDebuggingData() : nil)
             apiMode.envrionment = mode.envrionment
             let api = try await Whooshing.make(apiMode, with: inline).get()
-            api.app.logger.logLevel = logLevel
+            api.logger.logLevel = logLevel
             do {
                 try await Configuration.api(api, app: api.app)
             } catch {
@@ -164,7 +164,7 @@ extension Woo {
             var httpsMode = Whooshing<Https>.Mode.detect(testingAllowed ? DebuggingParameters.httpsDebuggingData() : nil)
             httpsMode.envrionment = mode.envrionment
             let https = try await Whooshing.make(httpsMode).get()
-            https.app.logger.logLevel = logLevel
+            https.logger.logLevel = logLevel
             do {
                 try await Configuration.https(https, app: https.app)
             } catch {
