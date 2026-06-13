@@ -4,6 +4,7 @@ import NIOCore
 import NIOPosix
 import Cryptos
 import ErrorHandle
+import LoggingAdvanced
 import WhooshingServer
 
 /// 该函数为入口函数，是整个 Whooshing 服务的执行起始点
@@ -32,22 +33,27 @@ enum Woo {
     /// 指示当前环境是否为独立调试模式
     static let isIndependentDebug: Bool = mode.envrionment != .production && testingAllowed
     
-    /// 指定所有日志的记录等级
-    static let logLevel: Logger.Level = .info
+    /// 该模块的日志配置
+    static let logger: Logger = {
+        var logger = Logger(label: "app")
+        /// 指定所有日志的记录等级
+        logger.logLevel = .notice
+        return logger
+    }()
 }
 
 /// 用于调试模式的参数，仅在独立调试和测试模式下生效，不会在生产或非独立开发模式下生效
 /// 关于模式，见 `Whooshing.Mode`
 struct DebuggingParameters {
-    /// 服务跟密钥
-    static let rootKey = Crypto.Symm.Key(data: Data(base64Encoded: rootKeyStr)!)
+    /// 服务根密钥
+    static let rootKey = SendableSymmKey(key: .init(data: Data(base64Encoded: rootKeyStr)!))
     static let rootKeyStr = "0apYyvRtLuo7l07zuqbEjFIxDFZ1sIWabKM9mMOOIzQ="
     
     /// 客户端访问 api 服务时所必须持有的凭据，若凭据不正确，则会拒绝该用户的连线
     static let apiClientCredential = "bRRPIiYbt0t4RzfqeeHSkg=="
     
     /// 客户端访问 api 服务时所必须持有的口令，若口令不正确，则会拒绝该用户的连线
-    static let apiClientToken = Crypto.Symm.Key(data: Data(base64Encoded: apiClientTokenStr)!)
+    static let apiClientToken = SendableSymmKey(key: .init(data: Data(base64Encoded: apiClientTokenStr)!))
     static let apiClientTokenStr = "jXTz4vTQk0O/XFIjWQIHLC7z9/E0/4VtEb+LkF8IcA4="
     
     /// inline 子模块监听的段口号
@@ -77,7 +83,7 @@ extension DebuggingParameters {
         .init(
             rootKey: rootKey,
             config: Environment.Config(
-                name: "Testing-Inline-\(inlineListenPort)",
+                name: "app",
                 port: inlineListenPort,
                 dbServices: dbServiceConfigs
             ),
@@ -91,7 +97,7 @@ extension DebuggingParameters {
     static func apiDebuggingData(dbServiceConfigs: [Environment.DBService] = []) -> Api.Debuging {
         .init(
             config: Environment.Config(
-                name: "Tesing-Api-\(apiListenPort)",
+                name: "app",
                 port: apiListenPort,
                 dbServices: dbServiceConfigs
             )
@@ -106,7 +112,7 @@ extension DebuggingParameters {
     static func httpsDebuggingData(dbServiceConfigs: [Environment.DBService] = []) -> Https.Debuging{
         .init(
             config: Environment.Config(
-                name: "Testing-Https-\(httpsListenPort)",
+                name: "app",
                 port: httpsListenPort,
                 dbServices: dbServiceConfigs
             )
@@ -117,17 +123,18 @@ extension DebuggingParameters {
 extension Woo {
     
     static let mode: Whooshing<Inline>.Mode = {
-        var mode = Whooshing<Inline>.Mode.detect(testingAllowed ? DebuggingParameters.inlineDebuggingData() : nil)
-        fatalIfFail {
-            try LoggingSystem.bootstrap(from: &mode.envrionment)
+        Whooshing<Inline>.Mode.detect(testingAllowed ? DebuggingParameters.inlineDebuggingData() : nil)
+    }()
+    
+    private static let inlineBootstrap: Whooshing<Inline>.BootstrapParas = {
+        asyncToSync {
+            try await Whooshing.bootstrap(mode, logger: Self.logger.derive(subId: "inline")).get()
         }
-        return mode
     }()
     
     static let inline: Whooshing<Inline> = {
         asyncToSync {
-            let inline = try await Whooshing.make(mode).get()
-            inline.logger.logLevel = logLevel
+            let inline = try await Whooshing.make(inlineBootstrap).get()
             do {
                 try await Configuration.inline(inline, app: inline.app)
             } catch {
@@ -140,12 +147,17 @@ extension Woo {
     }()
     
     #if API
-    static let api: Whooshing<Api> = {
+    private static let apiBootstrap: Whooshing<Api>.BootstrapParas = {
         asyncToSync {
             var apiMode = Whooshing<Api>.Mode.detect(testingAllowed ? DebuggingParameters.apiDebuggingData() : nil)
             apiMode.envrionment = mode.envrionment
-            let api = try await Whooshing.make(apiMode, with: inline).get()
-            api.logger.logLevel = logLevel
+            return try await Whooshing.bootstrap(apiMode, logger: Self.logger.derive(subId: "api")).get()
+        }
+    }()
+    
+    static let api: Whooshing<Api> = {
+        asyncToSync {
+            let api = try await Whooshing.make(apiBootstrap, with: inline).get()
             do {
                 try await Configuration.api(api, app: api.app)
             } catch {
@@ -159,12 +171,17 @@ extension Woo {
     #endif
     
     #if HTTPS
-    static let https: Whooshing<Https> = {
+    private static let httpsBootstrap: Whooshing<Https>.BootstrapParas = {
         asyncToSync {
             var httpsMode = Whooshing<Https>.Mode.detect(testingAllowed ? DebuggingParameters.httpsDebuggingData() : nil)
             httpsMode.envrionment = mode.envrionment
-            let https = try await Whooshing.make(httpsMode).get()
-            https.logger.logLevel = logLevel
+            return try await Whooshing.bootstrap(httpsMode, logger: Self.logger.derive(subId: "https")).get()
+        }
+    }()
+    
+    static let https: Whooshing<Https> = {
+        asyncToSync {
+            let https = try await Whooshing.make(httpsBootstrap).get()
             do {
                 try await Configuration.https(https, app: https.app)
             } catch {
@@ -177,7 +194,29 @@ extension Woo {
     }()
     #endif
     
+    static func bootstrap() {
+        var factories: [LoggingFactory] = []
+        
+        factories.append(inlineBootstrap.loggingFactory)
+        
+        #if API
+        factories.append(apiBootstrap.loggingFactory)
+        #endif
+        #if HTTPS
+        factories.append(httpsBootstrap.loggingFactory)
+        #endif
+        
+        let factory = LoggingFactory(factories: factories)
+        if isIndependentDebug {
+            factory.append(strategies: [.init(label: "console", level: .trace)]).bootstrap()
+        } else {
+            factory.bootstrap()
+        }
+    }
+    
     static func main() async throws {
+        bootstrap()
+        
         // 并行启动服务
         #if !API && !HTTPS
         try await inline.executeWithAsyncShutdown().get()

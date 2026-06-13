@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-tests:
-    uses: SJJC-Team/ci/.github/workflows/run-unit-tests.yml@develop
+    uses: whooshing-workshop/ci/.github/workflows/run-unit-tests.yml@develop
     with:
       ios_scheme_name: whooshing.template-basic
       work_dir: "."

@@ -6,7 +6,7 @@ on:
 
 jobs:
   release-and-package:
-    uses: SJJC-Team/ci/.github/workflows/release.yml@develop
+    uses: whooshing-workshop/ci/.github/workflows/release.yml@develop
     with:
       work_dir: "."
       app_name: "App"

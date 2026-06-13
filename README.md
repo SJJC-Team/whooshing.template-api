@@ -1,13 +1,13 @@
 # Whooshing 服务模块模版
-基于 [Vapor](https://vapor.codes/) 以及 [WhooshingServer](https://github.com/SJJC-Team/whooshing.toolbox-server) 构建的服务模块模版。
+基于 [Vapor](https://vapor.codes/) 以及 [WhooshingServer](https://github.com/whooshing-workshop/whooshing.toolbox-server) 构建的服务模块模版。
 
 用于快速初始化一个 Whooshing 系统的服务模块且与其深度集成，可创建 API / HTTPS / INLINE 三种子模块类型且支持进行独立开发环境测试。
 
 已集成以下 Whooshing 核心库：
 
-- [whooshing.toolbox-server](https://github.com/SJJC-Team/whooshing.toolbox-server)
-- [whooshing.toolbox-basic](https://github.com/SJJC-Team/whooshing.toolbox-basic)
-- [whooshing-vapor](https://github.com/SJJC-Team/whooshing-vapor)
+- [whooshing.toolbox-server](https://github.com/whooshing-workshop/whooshing.toolbox-server)
+- [whooshing.toolbox-basic](https://github.com/whooshing-workshop/whooshing.toolbox-basic)
+- [whooshing-vapor](https://github.com/whooshing-workshop/whooshing-vapor)
 
 本项目高度依赖  [Vapor](https://vapor.codes/)，另请参阅 [Vapor 官方文档](https://docs.vapor.codes/)
 
@@ -15,7 +15,7 @@
 
 ### 项目简介
 
-通过少量配置即可启动开发、调试与部署。另见 [whooshing.toolbox-server](https://github.com/SJJC-Team/whooshing.toolbox-server)
+通过少量配置即可启动开发、调试与部署。另见 [whooshing.toolbox-server](https://github.com/whooshing-workshop/whooshing.toolbox-server)
 
 支持构建独立的服务子模块，可与 Whooshing 系统中的其他模块无缝对接，默认集成：
 
@@ -32,7 +32,7 @@
 1. **克隆本模版项目**
 
    ```sh
-   git clone https://github.com/SJJC-Team/whooshing.template-basic.git MyService
+   git clone https://github.com/whooshing-workshop/whooshing.template-basic.git MyService
    cd MyService
    ```
 
@@ -63,7 +63,7 @@
 
    > INLINE 子模块是必须的，因此未提供 INLINE 子模块的可选配置
    >
-   > 关于子模块，请见  [whooshing.toolbox-server](https://github.com/SJJC-Team/whooshing.toolbox-server)
+   > 关于子模块，请见  [whooshing.toolbox-server](https://github.com/whooshing-workshop/whooshing.toolbox-server)
 
 4. **模块配置**
 
@@ -158,6 +158,6 @@ swift test
 
 ### 联系与反馈
 
-如有使用问题或建议，请通过 [GitHub Issues](https://github.com/SJJC-Team/whooshing.template-basic/issues) 提交反馈。
+如有使用问题或建议，请通过 [GitHub Issues](https://github.com/whooshing-workshop/whooshing.template-basic/issues) 提交反馈。
 
 或发至邮箱 [contact@official.whooshings.space](mailto:contact@official.whooshings.space)
