@@ -8,7 +8,10 @@ import WhooshingServer
 struct AppTests {
     private func withApp(_ test: (Whooshing<Https>, Application) async throws -> ()) async throws {
         let logger = Logger(label: "testing")
-        let bootstrap = try await Whooshing<Https>.bootstrap(.testing(DebuggingParameters.httpsDebuggingData()), logger: logger).get()
+        let bootstrap = try await Whooshing<Https>.bootstrap(
+            .testing(DebuggingParameters.httpsDebuggingData()),
+            logger: logger
+        ).get()
         let woo = try await Whooshing.make(bootstrap).get()
         do {
             try await Configuration.https(woo, app: woo.app)

@@ -24,6 +24,11 @@ import WhooshingServer
 /// 若是 xcode 构建，则默认为 development 环境
 @main
 enum Woo {
+    /// 该服务模块的名称
+    static let appName = "App"
+    
+    /// 本模块的 Id，仅用于模块标识和区分，不涉及任何机密操作，与 serviceId 不同，勿混用
+    static let moduleId = UUID(uuidString: "9D61FB39-D7EF-46B6-8690-4DDD23E561A4")!
     
     /// 配置该服务模块是否接受运行在测试环境中，可将其改为 false
     /// 这样，若检测到环境为 testing 将会直接 fatalError
@@ -63,6 +68,10 @@ struct DebuggingParameters {
     /// api 子模块监听的段口号
     static let apiListenPort = 6502
     
+    /// 本模块的 Inline 子模块的 ServiceId
+    /// 默认取自 serviceIds 中的第一项
+    static var serviceId: UUID { serviceIds[0] }
+    
     /// inline 模块接受的来源服务的 ID
     ///
     /// 若有其他服务模块访问该模块，其 ServiceId 必须在以下白名单中，否则将会被拒绝连线
@@ -83,11 +92,12 @@ extension DebuggingParameters {
         .init(
             rootKey: rootKey,
             config: Environment.Config(
-                name: "app",
+                id: Woo.moduleId,
+                name: Woo.appName.lowercased(),
                 port: inlineListenPort,
                 dbServices: dbServiceConfigs
             ),
-            serviceId: serviceIds[0],
+            serviceId: serviceId,
             moduleDatas: serviceIds.enumerated().map {
                 .init(name: "Testing-Inline-\(inlineListenPort + $0)", serviceId: $1, connection: nil)
             }
@@ -97,7 +107,8 @@ extension DebuggingParameters {
     static func apiDebuggingData(dbServiceConfigs: [Environment.DBService] = []) -> Api.Debuging {
         .init(
             config: Environment.Config(
-                name: "app",
+                id: Woo.moduleId,
+                name: Woo.appName.lowercased(),
                 port: apiListenPort,
                 dbServices: dbServiceConfigs
             )
@@ -112,7 +123,8 @@ extension DebuggingParameters {
     static func httpsDebuggingData(dbServiceConfigs: [Environment.DBService] = []) -> Https.Debuging{
         .init(
             config: Environment.Config(
-                name: "app",
+                id: Woo.moduleId,
+                name: Woo.appName.lowercased(),
                 port: httpsListenPort,
                 dbServices: dbServiceConfigs
             )
